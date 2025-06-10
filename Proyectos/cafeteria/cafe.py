@@ -13,7 +13,7 @@ def main():
         st.header("Headcount oficial - Departamento de Recursos Humanos")
         st.subheader("Subtítulo")
         st.text("Texto normal")
-        st.write("st.write es mejor opción")
+        st.write("## Tabla de RH completa")
 
         st.dataframe(data)
 
@@ -43,8 +43,12 @@ def main():
                       )
         st.plotly_chart(fig1)
 
+        st.write("## Distribución de edades según el cargo por sucursal")
 
-
+        cg_count = data.groupby(['Sucursal','Cargo'])['Edad'].mean()
+        st.dataframe(cg_count)
+        
+        
 
 if __name__ == '__main__':
     main ()
