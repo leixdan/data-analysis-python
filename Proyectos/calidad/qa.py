@@ -22,14 +22,16 @@ def main ():
     # Tabla de avance
     avance = {
         "Nombre": ["Daniel", "Karla", "Memo"],
-        "Historiales": [31, 34, 29],
-        "Alertas": [21, 20, 19],
-        "Compromisos": [12, 19, 15],
-        "Auditorías": [16, 21, 44],
-        "Total": [76, 80, 79] 
+        "Historiales": [44, 34, 61],
+        "Alertas": [45, 25, 19],
+        "Compromisos": [45, 19, 15],
+        "Auditorías": [20, 21, 44],
+        "Total": [0, 0, 0] 
     }
-
+    
     df_avance = pd.DataFrame(avance)
+    df_avance['Total'] = df_avance[['Historiales', 'Compromisos', "Auditorías"]].sum(axis=1)
+
     st.dataframe(df_avance)
 
     fig_avance = px.bar(df_avance,
@@ -40,10 +42,19 @@ def main ():
                         )
     st.plotly_chart(fig_avance)
 
-#Compromisos vs avance
-
-alert_comp = avance.groupby
-
+    #Compromisos vs avance
+    alert_comp = df_avance.melt(id_vars='Nombre',
+                                value_vars=['Alertas', 'Compromisos'],
+                                var_name='Tipo', value_name='Cantidad')
+    
+    fig_comp = px.bar(alert_comp,
+                       y= 'Nombre',
+                       x= 'Cantidad',
+                       color='Tipo',
+                       barmode='group',
+                       title='Comparativo de alertas y compromisos por Analista',
+                       color_discrete_sequence=['#FF5733', '#FFC300'])
+    st.plotly_chart(fig_comp)
 
 if __name__== '__main__':
     main()
